@@ -9,19 +9,20 @@ import (
 type ServiceInfo struct {
 	Title string
 }
-
-var serviceInfo = ServiceInfo {
-	"Amazon",
-}
-
+// 商品の情報
 type Product struct {
 	Name string
 }
-
+// コンテンツHTMLに渡す情報
 type pageContentData struct{
 	ServiceInfo
 	Product
 }
+// サイト共有情報記入
+var serviceInfo = ServiceInfo {
+	"Amazon",
+}
+
 
 func MainPage() echo.HandlerFunc {
 	//c をいじって Request, Responseを色々する

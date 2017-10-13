@@ -25,14 +25,13 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// HTML読み込み
-	t := &Template{
-		templates: template.Must(template.ParseGlob("views/*.html")),
-	}
+	t := &Template{templates: template.Must(template.ParseGlob("views/*.html")),}
 	e.Renderer = t
 
 	// ルーティング
 	e.GET("/", controller.MainPage())
+	e.Static("/assets", "assets")
 
 	// サーバー起動
-	e.Start(":8888")    //ポート番号指定してね
+	e.Start(":8888")
 }
