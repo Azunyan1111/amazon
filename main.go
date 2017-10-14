@@ -6,6 +6,8 @@ import (
 	"github.com/Azunyan1111/amazon/controller"
 	"io"
 	"html/template"
+	"os"
+	"fmt"
 )
 
 type Template struct {
@@ -17,6 +19,8 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func main() {
+	fmt.Println(os.Getenv("PORT"))
+
 	// Echoのインスタンス作る
 	e := echo.New()
 
