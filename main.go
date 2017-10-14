@@ -7,7 +7,6 @@ import (
 	"io"
 	"html/template"
 	"os"
-	"fmt"
 )
 
 type Template struct {
@@ -19,7 +18,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func main() {
-	fmt.Println(os.Getenv("PORT"))
 
 	// Echoのインスタンス作る
 	e := echo.New()
@@ -37,5 +35,5 @@ func main() {
 	e.Static("/assets", "assets")
 
 	// サーバー起動
-	e.Start(":8080")
+	e.Start(":" + os.Getenv("PORT"))
 }
