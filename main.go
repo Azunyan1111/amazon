@@ -37,5 +37,5 @@ func main() {
 	e.Static("/assets", "assets")
 
 	// サーバー起動
-	e.Start(":8888")
+	e.Start(":8080")
 }
