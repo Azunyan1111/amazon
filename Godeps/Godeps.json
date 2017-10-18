@@ -4,9 +4,23 @@
 	"GodepVersion": "v79",
 	"Deps": [
 		{
+			"ImportPath": "github.com/clbanning/mxj",
+			"Comment": "v1.6.1",
+			"Rev": "1cda74d18ebbb04f525b355309c16d594e1f8f77"
+		},
+		{
 			"ImportPath": "github.com/dgrijalva/jwt-go",
 			"Comment": "v3.0.0-20-ga539ee1",
 			"Rev": "a539ee1a749a2b895533f979515ac7e6e0f5b650"
+		},
+		{
+			"ImportPath": "github.com/kr/pretty",
+			"Comment": "go.weekly.2011-12-22-36-gcfb55aa",
+			"Rev": "cfb55aafdaf3ec08f0db22699ab822c50091b1c4"
+		},
+		{
+			"ImportPath": "github.com/kr/text",
+			"Rev": "7cafcd837844e784b526369c9bce262804aebc60"
 		},
 		{
 			"ImportPath": "github.com/labstack/echo",
@@ -47,6 +61,22 @@
 			"ImportPath": "github.com/mattn/go-isatty",
 			"Comment": "v0.0.3-1-ga5cdd64",
 			"Rev": "a5cdd64afdee435007ee3e9f6ed4684af949d568"
+		},
+		{
+			"ImportPath": "github.com/svvu/gomws/gmws",
+			"Rev": "90f0a3457a28d6ab64f3a475db0b6431eafbb856"
+		},
+		{
+			"ImportPath": "github.com/svvu/gomws/marketplace",
+			"Rev": "90f0a3457a28d6ab64f3a475db0b6431eafbb856"
+		},
+		{
+			"ImportPath": "github.com/svvu/gomws/mws/products",
+			"Rev": "90f0a3457a28d6ab64f3a475db0b6431eafbb856"
+		},
+		{
+			"ImportPath": "github.com/svvu/gomws/mwsHttps",
+			"Rev": "90f0a3457a28d6ab64f3a475db0b6431eafbb856"
 		},
 		{
 			"ImportPath": "github.com/valyala/bytebufferpool",
