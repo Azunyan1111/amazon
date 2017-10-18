@@ -5,8 +5,6 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"os"
-	"fmt"
-	"time"
 )
 
 var myDB *sql.DB
@@ -21,6 +19,7 @@ func DataBaseInit(){
 }
 
 // get rank urls
+// WANG this is 10 time second. only go func{}()
 func getURL()([]string, error){
 	rows, err := myDB.Query("SELECT URL FROM CategoryURL;")
 	if err != nil {
