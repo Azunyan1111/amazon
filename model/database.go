@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -9,7 +8,7 @@ import (
 
 var myDB *sql.DB
 
-func DataBaseInit(){
+func DataBaseInit() {
 	dataSource := os.Getenv("DATABASE_URL")
 	var err error
 	myDB, err = sql.Open("mysql", dataSource) //"root:@/my_database")
@@ -20,21 +19,21 @@ func DataBaseInit(){
 
 // get rank urls
 // WANG this is 10 time second. only go func{}()
-func getURL()([]string, error){
+func getURL() ([]string, error) {
 	rows, err := myDB.Query("SELECT URL FROM CategoryURL;")
 	if err != nil {
 		return nil, err
 	}
 	// list append
-	var urls []string = make([]string,0)
+	var urls []string = make([]string, 0)
 	for rows.Next() {
 		var url string
-		if err := rows.Scan(&url); err != nil{
+		if err := rows.Scan(&url); err != nil {
 			return nil, err
 		}
 		urls = append(urls, url)
 	}
-	return urls,nil
+	return urls, nil
 }
 
 func main() {

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/Azunyan1111/amazon/controller"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/Azunyan1111/amazon/controller"
-	"io"
 	"html/template"
+	"io"
 	"os"
 )
 
@@ -27,7 +27,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// HTML読み込み
-	t := &Template{templates: template.Must(template.ParseGlob("views/*.html")),}
+	t := &Template{templates: template.Must(template.ParseGlob("views/*.html"))}
 	e.Renderer = t
 
 	// ルーティング
