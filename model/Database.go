@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"database/sql"
@@ -9,6 +9,7 @@ import (
 var myDB *sql.DB
 
 func DataBaseInit() {
+	//hoge := "root:541279xx@tcp(mydbinstance.cv8ap3ddulzc.us-east-2.rds.amazonaws.com:3306)/amazon"
 	dataSource := os.Getenv("DATABASE_URL")
 	var err error
 	myDB, err = sql.Open("mysql", dataSource) //"root:@/my_database")
@@ -19,7 +20,8 @@ func DataBaseInit() {
 
 // get rank urls
 // WANG this is 10 time second. only go func{}()
-func getURL() ([]string, error) {
+func GetUrl() ([]string, error) {
+	// TODO: LIMIT
 	rows, err := myDB.Query("SELECT URL FROM CategoryURL;")
 	if err != nil {
 		return nil, err
@@ -36,10 +38,19 @@ func getURL() ([]string, error) {
 	return urls, nil
 }
 
-func main() {
+func SetNewASIN(asins []string){
+	for _, asin := range asins{
+		_, err := myDB.Exec("INSERT INTO ASIN(ASIN) VALUES(?)",asin)
+		if err != nil {
+			continue
+		}
+	}
+}
+
+func mains() {
 
 	DataBaseInit()
-	getURL()
+	GetUrl()
 	/*//
 	rows, err := myDB.Query("SELECT id,URL FROM CategoryURL;")
 	if err != nil {
