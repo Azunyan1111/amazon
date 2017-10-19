@@ -54,7 +54,7 @@ func GetRankingASIN(){
 		for i := 0; i < len(urls); i ++{
 			if i % connectPerSecond == 0{
 				log.Println("sleep now")
-				time.Sleep(30 * time.Second)
+				time.Sleep(60 * time.Second)
 			}
 			myChan <- urls[i]
 			log.Println("add myChan")
