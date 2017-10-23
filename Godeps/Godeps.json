@@ -4,6 +4,20 @@
 	"GodepVersion": "v79",
 	"Deps": [
 		{
+			"ImportPath": "github.com/PuerkitoBio/goquery",
+			"Comment": "v1.1.0-12-gbda427e",
+			"Rev": "bda427e2d46b90bc15f463480f75c2977fefc2b9"
+		},
+		{
+			"ImportPath": "github.com/Songmu/retry",
+			"Comment": "v0.0.1-6-gc20882a",
+			"Rev": "c20882a8d9aac8e7073601ef1b61d5863ac03dc7"
+		},
+		{
+			"ImportPath": "github.com/andybalholm/cascadia",
+			"Rev": "349dd0209470eabd9514242c688c403c0926d266"
+		},
+		{
 			"ImportPath": "github.com/clbanning/mxj",
 			"Comment": "v1.6.1",
 			"Rev": "1cda74d18ebbb04f525b355309c16d594e1f8f77"
@@ -12,6 +26,15 @@
 			"ImportPath": "github.com/dgrijalva/jwt-go",
 			"Comment": "v3.0.0-20-ga539ee1",
 			"Rev": "a539ee1a749a2b895533f979515ac7e6e0f5b650"
+		},
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.3-36-ga8b7ed4",
+			"Rev": "a8b7ed4454a6a4f98f85d3ad558cd6d97cec6959"
+		},
+		{
+			"ImportPath": "github.com/juju/errors",
+			"Rev": "c7d06af17c68cd34c835053720b21f6549d9b0ee"
 		},
 		{
 			"ImportPath": "github.com/kr/pretty",
@@ -63,6 +86,11 @@
 			"Rev": "a5cdd64afdee435007ee3e9f6ed4684af949d568"
 		},
 		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.0-6-g2b3a18b",
+			"Rev": "2b3a18b5f0fb6b4f9190549597d3f962c02bc5eb"
+		},
+		{
 			"ImportPath": "github.com/svvu/gomws/gmws",
 			"Rev": "90f0a3457a28d6ab64f3a475db0b6431eafbb856"
 		},
@@ -93,6 +121,14 @@
 		{
 			"ImportPath": "golang.org/x/crypto/acme/autocert",
 			"Rev": "b176d7def5d71bdd214203491f89843ed217f420"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html",
+			"Rev": "1c05540f6879653db88113bc4a2b70aec4bd491f"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html/atom",
+			"Rev": "1c05540f6879653db88113bc4a2b70aec4bd491f"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
