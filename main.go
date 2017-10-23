@@ -37,7 +37,7 @@ func main() {
 	}()
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
-	go func() { model.GetItemInfoLoopForDatabases() }() //ok
+	//go func() { model.GetItemInfoLoopForDatabases() }() //ok
 
 	// Echoのインスタンス作る
 	e := echo.New()
