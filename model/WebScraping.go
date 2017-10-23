@@ -45,13 +45,16 @@ func GetRankingASIN() {
 		log.Println(err)
 		return
 	}
+	fmt.Println(urls)
 
 	connectPerSecond := (len(urls) / 1440) + 2
 	go func() {
 		for i := 0; i < len(urls); i++ {
 			if i%connectPerSecond == 0 {
+				fmt.Println("sleep")
 				time.Sleep(60 * time.Second)
 			}
+			fmt.Println(urls[i])
 			myChan <- urls[i]
 		}
 		endChan <- 114514

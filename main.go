@@ -24,13 +24,15 @@ func main() {
 	model.DataBaseInit()
 	model.ApiInit()
 
+	model.GetRankingASIN()
+
 	// ループ処理
 	go func() {
 		for _ = 0; ; {
-			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
-			go func() { model.GetPrice() }()
 			// 1日一回実行するランキングWebスクレイピング関数。
 			go func() { model.GetRankingASIN() }() //ok
+			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
+			go func() { model.GetPrice() }()
 			time.Sleep(time.Hour * 24)
 		}
 	}()
