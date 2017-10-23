@@ -31,7 +31,7 @@ func main() {
 			// 1日一回実行するランキングWebスクレイピング関数。
 			go func() { model.GetRankingASIN() }() //ok
 			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
-			//go func() { model.GetPrice() }()
+			go func() { model.GetPrice() }()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
