@@ -40,24 +40,19 @@ func GetRankingASIN(){
 	//myChan <- "hoge" // 100を流し込む
 
 	// get urls
-	fmt.Println("hoge:GetURL")
 	urls, err := GetUrl()
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	fmt.Println("hoge:EndUrl")
 
 	connectPerSecond := (len(urls) / 1440) + 2
-	fmt.Println(connectPerSecond)
 	go func() {
 		for i := 0; i < len(urls); i ++{
 			if i % connectPerSecond == 0{
-				log.Println("sleep now")
 				time.Sleep(60 * time.Second)
 			}
 			myChan <- urls[i]
-			log.Println("add myChan")
 		}
 		endChan <- 114514
 	}()
@@ -97,7 +92,6 @@ func getRank(url string)([]string, error){
 		}
 		doc.Find(hoge).Each(func(_ int, s *goquery.Selection) {
 			url, _ := s.Attr("href")
-			//fmt.Println(url)
 			re := r.Copy()
 			asin = append(asin, re.FindStringSubmatch(url)[0][:10])
 		})

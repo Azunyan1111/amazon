@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"github.com/juju/errors"
 )
 
 type StockData struct {
@@ -19,10 +20,9 @@ type StockData struct {
 	InsertTime   int64
 }
 
+var client *products.Products
 
-
-
-func main() {
+func ApiInit(){
 	// API key config
 	config := gmws.MwsConfig{
 		SellerId:  os.Getenv("SellerId"),
@@ -30,50 +30,67 @@ func main() {
 		SecretKey: os.Getenv("SecretKey"),
 		Region:    "JP",
 	}
-
+	var err error
 	// Create client
-	productsClient, err := products.NewClient(config)
+	client, err = products.NewClient(config)
 	if err != nil {
 		log.Println(err)
 		return
 	}
+}
 
-	// Send request
-	response := productsClient.GetLowestOfferListingsForASIN([]string{"B00JPKHFTA", "B075VQ6RFZ"})
-	if response.Error != nil || response.StatusCode != http.StatusOK {
-		log.Println("http Status:" + string(response.StatusCode))
-		log.Println(response.Error)
-		return
-	}
 
-	// responseXML to XMLNode
-	xmlNode, err := gmws.GenerateXMLNode(response.Body)
-	if gmws.HasErrors(xmlNode) {
-		log.Println(gmws.GetErrors(xmlNode))
-		return
-	}
+// only go func
+func GetItemInfoLoopForDatabases(){
+	for _ = 1;;{
 
-	// Get all products
-	products := xmlNode.FindByKey("GetLowestOfferListingsForASINResult")
-	// products to one product
-	for _, product := range products {
-		// Get all stocks
-		stocks := product.FindByPath("Product.LowestOfferListings.LowestOfferListing")
-
-		insertTime := time.Now().Unix()
-
-		// stocks to one stock
-		for _, stock := range stocks {
-			temp := StockData{
-				ASIN:         product.FindByPath("Product.Identifiers.MarketplaceASIN.ASIN")[0].Value.(string),
-				Amount:       stock.FindByPath("Price.LandedPrice.Amount")[0].Value.(string),
-				Channel:      stock.FindByPath("Qualifiers.FulfillmentChannel")[0].Value.(string),
-				Condition:    stock.FindByPath("Qualifiers.ItemCondition")[0].Value.(string),
-				ShippingTime: stock.FindByPath("Qualifiers.ShippingTime.Max")[0].Value.(string),
-				InsertTime:   insertTime,
-			}
-
-			fmt.Println(temp)
+		hoge, err := GetItemNotHaveInfoASIN(5)
+		if err != nil{
+			fmt.Println(err)
+		}
+		if len(hoge) !=5{
+			time.Sleep(1 * time.Hour)
+		}
+		start := time.Now()
+		items, err := GetItemLookup(hoge)
+		if err != nil{
+			fmt.Println(err)
+			time.Sleep(1 * time.Hour)
+			continue
+		}
+		SetItemInfo(items)
+		end := time.Now()
+		// 1 H 18000 request
+		if (end.Sub(start)).Seconds() < 1{
+			time.Sleep(time.Second)
 		}
 	}
+}
+// only info
+func GetItemLookup(asinList []string)([]Item, error){
+	if len(asinList) != 5{
+		return []Item{}, errors.New("asinList len err")
+	}
+	// send
+	response1 := client.GetMatchingProductForId("ASIN",asinList)
+	if response1.Error != nil || response1.StatusCode != http.StatusOK {
+		return []Item{}, response1.Error
+	}
+	// responseXML to XMLNode
+	xmlNode, _ := gmws.GenerateXMLNode(response1.Body)
+	if gmws.HasErrors(xmlNode) {
+		// TODO:正常にレスポンスは受け取っているが含まれていない謎のエラーが存在する
+		//log.Println(gmws.GetErrors(xmlNode))
+		//return []Item{}, errors.New("XML ERROR")
+	}
+	// set Item
+	var items []Item
+	for i, _ := range xmlNode.FindByKey("Title"){
+		var item Item
+		item.ASIN = xmlNode.FindByKey("ASIN")[i].Value.(string)
+		item.Title = xmlNode.FindByKey("Title")[i].Value.(string)
+		item.Image = xmlNode.FindByKey("URL")[i].Value.(string)
+		items = append(items, item)
+	}
+	return items, nil
 }

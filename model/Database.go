@@ -4,15 +4,16 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"os"
+	"fmt"
 )
 
-var myDB *sql.DB
+var MyDB *sql.DB
 
 func DataBaseInit() {
 	//hoge := "root:541279xx@tcp(mydbinstance.cv8ap3ddulzc.us-east-2.rds.amazonaws.com:3306)/amazon"
 	dataSource := os.Getenv("DATABASE_URL")
 	var err error
-	myDB, err = sql.Open("mysql", dataSource) //"root:@/my_database")
+	MyDB, err = sql.Open("mysql", dataSource) //"root:@/my_database")
 	if err != nil {
 		panic(err)
 	}
@@ -22,7 +23,7 @@ func DataBaseInit() {
 // WANG this is 10 time second. only go func{}()
 func GetUrl() ([]string, error) {
 	// TODO: LIMIT
-	rows, err := myDB.Query("SELECT URL FROM CategoryURL;")
+	rows, err := MyDB.Query("SELECT URL FROM CategoryURL;")
 	if err != nil {
 		return nil, err
 	}
@@ -40,42 +41,36 @@ func GetUrl() ([]string, error) {
 
 func SetNewASIN(asins []string){
 	for _, asin := range asins{
-		_, err := myDB.Exec("INSERT INTO ASIN(ASIN) VALUES(?)",asin)
+		_, err := MyDB.Exec("INSERT INTO Items(ASIN) VALUES(?)",asin)
 		if err != nil {
 			continue
 		}
 	}
 }
 
-func mains() {
-
-	DataBaseInit()
-	GetUrl()
-	/*//
-	rows, err := myDB.Query("SELECT id,URL FROM CategoryURL;")
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
-	type test struct {
-		Id       int64
-		Category string
-	}
-
-	start := time.Now()
-	var posts []test
-	for rows.Next() {
-		var post test
-		if err := rows.Scan(&post.Id, &post.Category); err != nil{
-			panic(err)
+func SetItemInfo(items []Item){
+	for _, hoge := range items{
+		_, err := MyDB.Exec("UPDATE Items SET title = ?, image = ? WHERE ASIN = ?",
+			hoge.Title, hoge.Image, hoge.ASIN)
+		if err != nil {
+			fmt.Println(err)
 		}
-		posts = append(posts, post)
 	}
-	// 処理
-	end := time.Now()
-	fmt.Printf("%f秒\n",(end.Sub(start)).Seconds())
-	//fmt.Println(posts)
+}
 
-	//*/
-	// データベース接続終了(リターン時呼び出し)
-	defer myDB.Close()
+func GetItemNotHaveInfoASIN(limit int)([]string, error){
+	rows, err := MyDB.Query("SELECT ASIN FROM Items WHERE title IS null LIMIT ?", limit)
+	if err != nil {
+		return nil, err
+	}
+	// list append
+	var asins []string = make([]string, 0)
+	for rows.Next() {
+		var asin string
+		if err := rows.Scan(&asin); err != nil {
+			return nil, err
+		}
+		asins = append(asins, asin)
+	}
+	return asins, nil
 }
