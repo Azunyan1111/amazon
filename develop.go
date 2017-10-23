@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func main_() {
 	hoge := make(chan int64)
 	model.DataBaseInit()
 	model.ApiInit()
