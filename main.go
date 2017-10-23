@@ -24,7 +24,6 @@ func main() {
 	model.DataBaseInit()
 	model.ApiInit()
 
-	model.GetRankingASIN()
 
 	// ループ処理
 	go func() {
