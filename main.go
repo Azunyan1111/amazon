@@ -32,12 +32,12 @@ func main() {
 			go func() { model.GetRankingASIN() }() //ok
 			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
 			//go func() { model.GetPrice() }()
-			time.Sleep(time.Hour * 24)
+			time.Sleep(time.Hour * 1)
 		}
 	}()
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
-	//go func() { model.GetItemInfoLoopForDatabases() }() //ok
+	go func() { model.GetItemInfoLoopForDatabases() }() //ok
 
 	// Echoのインスタンス作る
 	e := echo.New()
