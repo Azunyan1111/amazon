@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"os"
 	"fmt"
+	"github.com/juju/errors"
 )
 
 var MyDB *sql.DB
@@ -21,7 +22,7 @@ func DataBaseInit() {
 
 // get rank urls
 // WANG this is 10 time second. only go func{}()
-func GetUrl() ([]string, error) {
+func SelectAllUrl() ([]string, error) {
 	// TODO: LIMIT
 	rows, err := MyDB.Query("SELECT URL FROM CategoryURL;")
 	if err != nil {
@@ -39,7 +40,7 @@ func GetUrl() ([]string, error) {
 	return urls, nil
 }
 
-func SetNewASIN(asins []string){
+func InsertNewASIN(asins []string){
 	for _, asin := range asins{
 		_, err := MyDB.Exec("INSERT INTO Items(ASIN) VALUES(?)",asin)
 		if err != nil {
@@ -48,7 +49,7 @@ func SetNewASIN(asins []string){
 	}
 }
 
-func SetItemInfo(items []Item){
+func UpdateItemInfo(items []Item){
 	for _, hoge := range items{
 		_, err := MyDB.Exec("UPDATE Items SET title = ?, image = ? WHERE ASIN = ?",
 			hoge.Title, hoge.Image, hoge.ASIN)
@@ -58,7 +59,7 @@ func SetItemInfo(items []Item){
 	}
 }
 
-func GetItemNotHaveInfoASIN(limit int)([]string, error){
+func SelectNotHaveInfoItemForASIN(limit int)([]string, error){
 	rows, err := MyDB.Query("SELECT ASIN FROM Items WHERE title IS null LIMIT ?", limit)
 	if err != nil {
 		return nil, err
@@ -73,4 +74,40 @@ func GetItemNotHaveInfoASIN(limit int)([]string, error){
 		asins = append(asins, asin)
 	}
 	return asins, nil
+}
+
+func SelectAllForASINLimit864000()([] string, error){
+	// new connection
+	dataSource := os.Getenv("DATABASE_URL")
+	myDB, err := sql.Open("mysql", dataSource) //"root:@/my_database")
+	if err != nil {
+		return nil,errors.New("Can not connection Database")
+	}
+
+	// query. API MAX 86500 / day
+	rows, err := MyDB.Query("SELECT ASIN FROM Items ORDER BY RAND() LIMIT 864000")
+	if err != nil {
+		return nil, err
+	}
+	// list append
+	var asins []string
+	for rows.Next() {
+		var asin string
+		if err := rows.Scan(&asin); err != nil {
+			return nil, err
+		}
+		asins = append(asins, asin)
+	}
+	defer myDB.Close()
+	return asins, nil
+}
+
+func InsertProductPrice(asins []ProductStock){
+	for _, asin := range asins{
+		_, err := MyDB.Exec("INSERT INTO Price(ASIN,Amount,Channel,Conditions,ShippingTime,InsertTime)" +
+			" VALUES(?,?,?,?,?,?)",asin.ASIN,asin.Amount,asin.Channel,asin.Conditions,asin.ShippingTime,asin.InsertTime)
+		if err != nil {
+			continue
+		}
+	}
 }

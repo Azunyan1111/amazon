@@ -22,7 +22,7 @@ func sendWebScraping(myCh chan string) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		SetNewASIN(asins)
+		InsertNewASIN(asins)
 	}
 }
 
@@ -40,7 +40,7 @@ func GetRankingASIN(){
 	//myChan <- "hoge" // 100を流し込む
 
 	// get urls
-	urls, err := GetUrl()
+	urls, err := SelectAllUrl()
 	if err != nil {
 		log.Println(err)
 		return

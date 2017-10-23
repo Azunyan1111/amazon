@@ -1465,7 +1465,7 @@ var signals = [...]string{
 	18: "child Status Changed",
 	19: "power-Fail/Restart",
 	20: "window Size Change",
-	21: "urgent Socket Condition",
+	21: "urgent Socket Conditions",
 	22: "pollable Event",
 	23: "stopped (signal)",
 	24: "stopped (user)",
