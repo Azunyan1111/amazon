@@ -5,7 +5,7 @@
 <h1>{{.Item.Title}}</h1>
 <img src="{{.Item.Image}}">
 <h2>{{.Item.ASIN}}</h2>
-
+<a href="http://www.amazon.co.jp/dp/{{.Item.ASIN}}"><button>買いに行く</button></a>
 
 {{if .Message}}
 <h3>{{.Message}}</h3>
