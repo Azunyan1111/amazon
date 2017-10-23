@@ -6,6 +6,10 @@
 <img src="{{.Item.Image}}">
 <h2>{{.Item.ASIN}}</h2>
 
+
+{{if .Message}}
+<h3>{{.Message}}</h3>
+{{end}}
 <div class="bs-component">
     <table class="table table-striped table-hover ">
         <thead>

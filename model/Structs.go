@@ -9,6 +9,7 @@ type ServiceInfo struct {
 type PageContentData struct {
 	ServiceInfo
 	Message string
+	SubMessage string
 	Item
 	ProductStocks []ProductStock
 }

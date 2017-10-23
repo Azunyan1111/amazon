@@ -116,7 +116,7 @@ func SelectProductInfoForASIN(asin string)(Item, error){
 	var product Item
 	if err := MyDB.QueryRow("SELECT title,image FROM Items WHERE ASIN = ? LIMIT 1", asin).Scan(
 		&product.Title,&product.Image); err != nil {
-			return Item{},err
+			return Item{ASIN:asin},err
 	}
 	product.ASIN = asin
 	return product, nil

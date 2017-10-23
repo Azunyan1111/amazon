@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"github.com/Azunyan1111/amazon/model"
+	"time"
 )
 
 type Template struct {
@@ -22,6 +23,21 @@ func main() {
 	// 初期処理
 	model.DataBaseInit()
 	model.ApiInit()
+
+	// ループ処理
+	go func() {
+		for _ =0;; {
+			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
+			go func() { model.GetPrice() }()
+			// 1日一回実行するランキングWebスクレイピング関数。
+			go func() {model.GetRankingASIN()}() //ok
+			time.Sleep(time.Hour * 24)
+		}
+	}()
+
+	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
+	go func() { model.GetItemInfoLoopForDatabases() }() //ok
+
 
 	// Echoのインスタンス作る
 	e := echo.New()
