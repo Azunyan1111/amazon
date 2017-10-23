@@ -2,21 +2,19 @@ package model
 
 import (
 	"fmt"
+	"github.com/juju/errors"
 	"github.com/svvu/gomws/gmws"
 	"github.com/svvu/gomws/mws/products"
 	"log"
 	"net/http"
 	"os"
-	"time"
-	"github.com/juju/errors"
 	"strconv"
+	"time"
 )
-
-
 
 var client *products.Products
 
-func ApiInit(){
+func ApiInit() {
 	// API key config
 	config := gmws.MwsConfig{
 		SellerId:  os.Getenv("SellerId"),
@@ -33,21 +31,20 @@ func ApiInit(){
 	}
 }
 
-
 // only go func
-func GetItemInfoLoopForDatabases(){
-	for _ = 1;;{
+func GetItemInfoLoopForDatabases() {
+	for _ = 1; ; {
 
 		hoge, err := SelectNotHaveInfoItemForASIN(5)
-		if err != nil{
+		if err != nil {
 			fmt.Println(err)
 		}
-		if len(hoge) !=5{
+		if len(hoge) != 5 {
 			time.Sleep(1 * time.Hour)
 		}
 		start := time.Now()
 		items, err := GetItemLookup(hoge)
-		if err != nil{
+		if err != nil {
 			fmt.Println(err)
 			time.Sleep(1 * time.Hour)
 			continue
@@ -55,18 +52,19 @@ func GetItemInfoLoopForDatabases(){
 		UpdateItemInfo(items)
 		end := time.Now()
 		// 1 H 18000 request
-		if (end.Sub(start)).Seconds() < 1{
+		if (end.Sub(start)).Seconds() < 1 {
 			time.Sleep(time.Second)
 		}
 	}
 }
+
 // only info
-func GetItemLookup(asinList []string)([]Item, error){
-	if len(asinList) != 5{
+func GetItemLookup(asinList []string) ([]Item, error) {
+	if len(asinList) != 5 {
 		return []Item{}, errors.New("asinList len err")
 	}
 	// send
-	response1 := client.GetMatchingProductForId("ASIN",asinList)
+	response1 := client.GetMatchingProductForId("ASIN", asinList)
 	if response1.Error != nil || response1.StatusCode != http.StatusOK {
 		return []Item{}, response1.Error
 	}
@@ -79,7 +77,7 @@ func GetItemLookup(asinList []string)([]Item, error){
 	}
 	// set Item
 	var items []Item
-	for i, _ := range xmlNode.FindByKey("Title"){
+	for i, _ := range xmlNode.FindByKey("Title") {
 		var item Item
 		item.ASIN = xmlNode.FindByKey("ASIN")[i].Value.(string)
 		item.Title = xmlNode.FindByKey("Title")[i].Value.(string)
@@ -90,31 +88,31 @@ func GetItemLookup(asinList []string)([]Item, error){
 }
 
 // go func only. 1 day
-func GetPrice(){
+func GetPrice() {
 	allASIN, err := SelectAllForASINLimit864000()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		return
 	}
 	var asinDoubleArray [][]string
 	var tempArray []string
 	for i, asin := range allASIN {
-		if i % 21 == 0{
-			if len(tempArray) == 0{
+		if i%21 == 0 {
+			if len(tempArray) == 0 {
 				continue
 			}
 			asinDoubleArray = append(asinDoubleArray, tempArray)
 			tempArray = []string{}
-		}else {
-			tempArray = append(tempArray,asin)
+		} else {
+			tempArray = append(tempArray, asin)
 		}
 	}
 
 	// send api
-	for _, asinArray := range asinDoubleArray{
+	for _, asinArray := range asinDoubleArray {
 		//*/
 		start := time.Now()
-		response := client.GetLowestOfferListingsForASIN(asinArray, gmws.Parameters{"ItemCondition":"New"})
+		response := client.GetLowestOfferListingsForASIN(asinArray, gmws.Parameters{"ItemCondition": "New"})
 		if response.Error != nil || response.StatusCode != http.StatusOK {
 			log.Println("http Status:" + string(response.StatusCode))
 			log.Println(response.Error)
@@ -147,9 +145,9 @@ func GetPrice(){
 					Channel:      stock.FindByPath("Qualifiers.FulfillmentChannel")[0].Value.(string),
 					Conditions:   stock.FindByPath("Qualifiers.ItemCondition")[0].Value.(string),
 					ShippingTime: stock.FindByPath("Qualifiers.ShippingTime.Max")[0].Value.(string),
-					InsertTime:   strconv.FormatInt(insertTime,10),
+					InsertTime:   strconv.FormatInt(insertTime, 10),
 				}
-				if !isInArray(saveProduct, temp){
+				if !isInArray(saveProduct, temp) {
 					saveProduct = append(saveProduct, temp)
 				}
 			}
@@ -158,7 +156,7 @@ func GetPrice(){
 
 		end := time.Now()
 		// 1 H 36000 request 1 request per 2second
-		if (end.Sub(start)).Seconds() < 2{
+		if (end.Sub(start)).Seconds() < 2 {
 			time.Sleep(2 * time.Second)
 		}
 		//*/

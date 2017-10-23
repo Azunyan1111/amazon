@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/Azunyan1111/amazon/controller"
+	"github.com/Azunyan1111/amazon/model"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"html/template"
 	"io"
 	"os"
-	"github.com/Azunyan1111/amazon/model"
 	"time"
 )
 
@@ -26,18 +26,17 @@ func main() {
 
 	// ループ処理
 	go func() {
-		for _ =0;; {
+		for _ = 0; ; {
 			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
 			go func() { model.GetPrice() }()
 			// 1日一回実行するランキングWebスクレイピング関数。
-			go func() {model.GetRankingASIN()}() //ok
+			go func() { model.GetRankingASIN() }() //ok
 			time.Sleep(time.Hour * 24)
 		}
 	}()
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
 	go func() { model.GetItemInfoLoopForDatabases() }() //ok
-
 
 	// Echoのインスタンス作る
 	e := echo.New()

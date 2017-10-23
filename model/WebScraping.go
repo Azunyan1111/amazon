@@ -1,13 +1,13 @@
 package model
 
 import (
-	"github.com/PuerkitoBio/goquery"
 	"fmt"
-	"strconv"
-	"regexp"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/Songmu/retry"
-	"log"
 	"github.com/pkg/errors"
+	"log"
+	"regexp"
+	"strconv"
 	"time"
 )
 
@@ -27,7 +27,7 @@ func sendWebScraping(myCh chan string) {
 }
 
 // only go func{}()
-func GetRankingASIN(){
+func GetRankingASIN() {
 
 	// intを送受信どちらもできるchannel
 	myChan := make(chan string)
@@ -48,8 +48,8 @@ func GetRankingASIN(){
 
 	connectPerSecond := (len(urls) / 1440) + 2
 	go func() {
-		for i := 0; i < len(urls); i ++{
-			if i % connectPerSecond == 0{
+		for i := 0; i < len(urls); i++ {
+			if i%connectPerSecond == 0 {
 				time.Sleep(60 * time.Second)
 			}
 			myChan <- urls[i]
@@ -60,7 +60,7 @@ func GetRankingASIN(){
 	<-endChan
 }
 
-func getRank(url string)([]string, error){
+func getRank(url string) ([]string, error) {
 	// 返すASIN
 	var asin []string
 	var doc *goquery.Document
@@ -72,7 +72,7 @@ func getRank(url string)([]string, error){
 		if err != nil {
 			return err
 		}
-		if doc.Find("title").Text() == "Amazon CAPTCHA"{
+		if doc.Find("title").Text() == "Amazon CAPTCHA" {
 			return errors.New("Amazon CAPTCHA")
 		}
 		return nil
@@ -81,13 +81,13 @@ func getRank(url string)([]string, error){
 		return nil, err
 	}
 
-	for i := 1; i <= 20;i ++{
+	for i := 1; i <= 20; i++ {
 		var hoge string
-		if i <= 3{
-			hoge = fmt.Sprintf("#zg_critical > div:nth-child(%s) >" +
+		if i <= 3 {
+			hoge = fmt.Sprintf("#zg_critical > div:nth-child(%s) >"+
 				" div.a-fixed-left-grid.p13n-asin > div > div.a-fixed-left-grid-col.a-col-right > a", strconv.Itoa(i))
-		}else{
-			hoge = fmt.Sprintf("#zg_nonCritical > div:nth-child(%s) >" +
+		} else {
+			hoge = fmt.Sprintf("#zg_nonCritical > div:nth-child(%s) >"+
 				" div.a-fixed-left-grid.p13n-asin > div > div.a-fixed-left-grid-col.a-col-right > a", strconv.Itoa(i-3))
 		}
 		doc.Find(hoge).Each(func(_ int, s *goquery.Selection) {

@@ -2,10 +2,10 @@ package model
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-	"os"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/juju/errors"
+	"os"
 )
 
 var MyDB *sql.DB
@@ -40,17 +40,17 @@ func SelectAllUrl() ([]string, error) {
 	return urls, nil
 }
 
-func InsertNewASIN(asins []string){
-	for _, asin := range asins{
-		_, err := MyDB.Exec("INSERT INTO Items(ASIN) VALUES(?)",asin)
+func InsertNewASIN(asins []string) {
+	for _, asin := range asins {
+		_, err := MyDB.Exec("INSERT INTO Items(ASIN) VALUES(?)", asin)
 		if err != nil {
 			continue
 		}
 	}
 }
 
-func UpdateItemInfo(items []Item){
-	for _, hoge := range items{
+func UpdateItemInfo(items []Item) {
+	for _, hoge := range items {
 		_, err := MyDB.Exec("UPDATE Items SET title = ?, image = ? WHERE ASIN = ?",
 			hoge.Title, hoge.Image, hoge.ASIN)
 		if err != nil {
@@ -59,7 +59,7 @@ func UpdateItemInfo(items []Item){
 	}
 }
 
-func SelectNotHaveInfoItemForASIN(limit int)([]string, error){
+func SelectNotHaveInfoItemForASIN(limit int) ([]string, error) {
 	rows, err := MyDB.Query("SELECT ASIN FROM Items WHERE title IS null LIMIT ?", limit)
 	if err != nil {
 		return nil, err
@@ -76,12 +76,12 @@ func SelectNotHaveInfoItemForASIN(limit int)([]string, error){
 	return asins, nil
 }
 
-func SelectAllForASINLimit864000()([] string, error){
+func SelectAllForASINLimit864000() ([]string, error) {
 	// new connection
 	dataSource := os.Getenv("DATABASE_URL")
 	myDB, err := sql.Open("mysql", dataSource) //"root:@/my_database")
 	if err != nil {
-		return nil,errors.New("Can not connection Database")
+		return nil, errors.New("Can not connection Database")
 	}
 
 	// query. API MAX 86500 / day
@@ -102,30 +102,30 @@ func SelectAllForASINLimit864000()([] string, error){
 	return asins, nil
 }
 
-func InsertProductPrice(asins []ProductStock){
-	for _, asin := range asins{
-		_, err := MyDB.Exec("INSERT INTO Price(ASIN,Amount,Channel,Conditions,ShippingTime,InsertTime)" +
-			" VALUES(?,?,?,?,?,?)",asin.ASIN,asin.Amount,asin.Channel,asin.Conditions,asin.ShippingTime,asin.InsertTime)
+func InsertProductPrice(asins []ProductStock) {
+	for _, asin := range asins {
+		_, err := MyDB.Exec("INSERT INTO Price(ASIN,Amount,Channel,Conditions,ShippingTime,InsertTime)"+
+			" VALUES(?,?,?,?,?,?)", asin.ASIN, asin.Amount, asin.Channel, asin.Conditions, asin.ShippingTime, asin.InsertTime)
 		if err != nil {
 			continue
 		}
 	}
 }
 
-func SelectProductInfoForASIN(asin string)(Item, error){
+func SelectProductInfoForASIN(asin string) (Item, error) {
 	var product Item
 	if err := MyDB.QueryRow("SELECT title,image FROM Items WHERE ASIN = ? LIMIT 1", asin).Scan(
-		&product.Title,&product.Image); err != nil {
-			return Item{ASIN:asin},err
+		&product.Title, &product.Image); err != nil {
+		return Item{ASIN: asin}, err
 	}
 	product.ASIN = asin
 	return product, nil
 }
 
-func SelectProductStockForASIN(asin string)([]ProductStock, error){
+func SelectProductStockForASIN(asin string) ([]ProductStock, error) {
 	// TODO: LIMIT
-	rows, err := MyDB.Query("SELECT Amount,Channel,Conditions,ShippingTime," +
-		"InsertTime FROM Price WHERE ASIN = ?;",asin)
+	rows, err := MyDB.Query("SELECT Amount,Channel,Conditions,ShippingTime,"+
+		"InsertTime FROM Price WHERE ASIN = ?;", asin)
 	if err != nil {
 		return []ProductStock{}, err
 	}
@@ -133,8 +133,8 @@ func SelectProductStockForASIN(asin string)([]ProductStock, error){
 	var productStocks []ProductStock
 	for rows.Next() {
 		var productStock ProductStock
-		if err := rows.Scan(&productStock.Amount,&productStock.Channel,
-			&productStock.Conditions,&productStock.ShippingTime,&productStock.InsertTime); err != nil {
+		if err := rows.Scan(&productStock.Amount, &productStock.Channel,
+			&productStock.Conditions, &productStock.ShippingTime, &productStock.InsertTime); err != nil {
 			return []ProductStock{}, err
 		}
 		productStock.ASIN = asin

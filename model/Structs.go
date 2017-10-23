@@ -8,14 +8,14 @@ type ServiceInfo struct {
 // コンテンツHTMLに渡す情報
 type PageContentData struct {
 	ServiceInfo
-	Message string
+	Message    string
 	SubMessage string
 	Item
 	ProductStocks []ProductStock
 }
 
 type Item struct {
-	ASIN string
+	ASIN  string
 	Title string
 	Image string
 }
