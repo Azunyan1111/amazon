@@ -24,7 +24,7 @@ func DataBaseInit() {
 // WANG this is 10 time second. only go func{}()
 func SelectAllUrl() ([]string, error) {
 	// TODO: LIMIT
-	rows, err := MyDB.Query("SELECT URL FROM CategoryURL;")
+	rows, err := MyDB.Query("SELECT URL FROM CategoryURL ORDER BY RAND()")
 	if err != nil {
 		return nil, err
 	}
