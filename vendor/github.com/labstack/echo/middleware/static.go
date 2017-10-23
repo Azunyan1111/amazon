@@ -22,7 +22,7 @@ type (
 		Root string `json:"root"`
 
 		// Index file for serving a directory.
-		// Optional. Default value "index.html".
+		// Optional. Default value "index2.html".
 		Index string `json:"index"`
 
 		// Enable HTML5 mode by forwarding all not-found requests to root so that
@@ -40,7 +40,7 @@ var (
 	// DefaultStaticConfig is the default Static middleware config.
 	DefaultStaticConfig = StaticConfig{
 		Skipper: DefaultSkipper,
-		Index:   "index.html",
+		Index:   "index2.html",
 	}
 )
 

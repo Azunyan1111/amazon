@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 	"github.com/juju/errors"
+	"strconv"
 )
 
 
@@ -146,7 +147,7 @@ func GetPrice(){
 					Channel:      stock.FindByPath("Qualifiers.FulfillmentChannel")[0].Value.(string),
 					Conditions:   stock.FindByPath("Qualifiers.ItemCondition")[0].Value.(string),
 					ShippingTime: stock.FindByPath("Qualifiers.ShippingTime.Max")[0].Value.(string),
-					InsertTime:   insertTime,
+					InsertTime:   strconv.FormatInt(insertTime,10),
 				}
 				if !isInArray(saveProduct, temp){
 					saveProduct = append(saveProduct, temp)

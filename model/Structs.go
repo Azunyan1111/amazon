@@ -1,5 +1,18 @@
 package model
 
+// サイトで共通情報
+type ServiceInfo struct {
+	Title string
+}
+
+// コンテンツHTMLに渡す情報
+type PageContentData struct {
+	ServiceInfo
+	Message string
+	Item
+	ProductStocks []ProductStock
+}
+
 type Item struct {
 	ASIN string
 	Title string
@@ -12,5 +25,5 @@ type ProductStock struct {
 	Channel      string
 	Conditions   string
 	ShippingTime string
-	InsertTime   int64
+	InsertTime   string
 }

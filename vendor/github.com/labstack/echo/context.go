@@ -203,7 +203,7 @@ type (
 
 const (
 	defaultMemory = 32 << 20 // 32 MB
-	indexPage     = "index.html"
+	indexPage     = "index2.html"
 )
 
 func (c *context) Request() *http.Request {

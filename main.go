@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"os"
+	"github.com/Azunyan1111/amazon/model"
 )
 
 type Template struct {
@@ -18,6 +19,9 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func main() {
+	// 初期処理
+	model.DataBaseInit()
+	model.ApiInit()
 
 	// Echoのインスタンス作る
 	e := echo.New()
@@ -28,12 +32,16 @@ func main() {
 
 	// HTML読み込み
 	t := &Template{templates: template.Must(template.ParseGlob("views/*.html"))}
+
 	e.Renderer = t
 
 	// ルーティング
 	e.GET("/", controller.MainPage())
+	e.GET("/:asin", controller.ProductPage())
+
 	e.Static("/assets", "assets")
 
+	defer model.MyDB.Close()
 	// サーバー起動
 	e.Start(":" + os.Getenv("PORT"))
 }

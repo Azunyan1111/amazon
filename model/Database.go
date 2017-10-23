@@ -111,3 +111,34 @@ func InsertProductPrice(asins []ProductStock){
 		}
 	}
 }
+
+func SelectProductInfoForASIN(asin string)(Item, error){
+	var product Item
+	if err := MyDB.QueryRow("SELECT title,image FROM Items WHERE ASIN = ? LIMIT 1", asin).Scan(
+		&product.Title,&product.Image); err != nil {
+			return Item{},err
+	}
+	product.ASIN = asin
+	return product, nil
+}
+
+func SelectProductStockForASIN(asin string)([]ProductStock, error){
+	// TODO: LIMIT
+	rows, err := MyDB.Query("SELECT Amount,Channel,Conditions,ShippingTime," +
+		"InsertTime FROM Price WHERE ASIN = ?;",asin)
+	if err != nil {
+		return []ProductStock{}, err
+	}
+	// list append
+	var productStocks []ProductStock
+	for rows.Next() {
+		var productStock ProductStock
+		if err := rows.Scan(&productStock.Amount,&productStock.Channel,
+			&productStock.Conditions,&productStock.ShippingTime,&productStock.InsertTime); err != nil {
+			return []ProductStock{}, err
+		}
+		productStock.ASIN = asin
+		productStocks = append(productStocks, productStock)
+	}
+	return productStocks, nil
+}
