@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"time"
+	"net/http"
 )
 
 type Template struct {
@@ -34,6 +35,12 @@ func main() {
 			go func() { model.GetPrice() }()
 			time.Sleep(time.Hour * 24)
 		}
+	}()
+
+	// heroku
+	go func() {
+		time.Sleep(29 * time.Minute + 50 * time.Second)
+		http.Get("https://calm-tor-56001.herokuapp.com/")
 	}()
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
