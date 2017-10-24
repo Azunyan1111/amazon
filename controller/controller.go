@@ -17,7 +17,13 @@ func MainPage() echo.HandlerFunc {
 	//c をいじって Request, Responseを色々する
 	return func(c echo.Context) error {
 		// テンプレートに渡す値
-		data := &model.PageContentData{ServiceInfo: serviceInfo, Item: model.Item{}}
+
+		//ランダムのアイテム取得
+		ranItem, err := model.SelectRandomProduct(5)
+		if err != nil {
+			fmt.Println(err)
+		}
+		data := &model.PageContentData{ServiceInfo: serviceInfo, Item: model.Item{},RandomItems:ranItem}
 		return c.Render(http.StatusOK, "index", data)
 	}
 }

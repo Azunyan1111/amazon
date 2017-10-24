@@ -19,5 +19,14 @@
       </div>
     </div>
   </div>
+{{if .RandomItems}}
+{{range .RandomItems}}
+<div class="hoge">
+    <a href="/{{.ASIN}}">
+        <h5>{{.Title}}</h5>
+        <img src="{{.Image}}" class="img-fluid" alt="Responsive image"></a>
+</div>
+{{end}}
+{{end}}
 {{template "footer" .}}
 {{end}}
