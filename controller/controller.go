@@ -10,7 +10,7 @@ import (
 
 // サイト共有情報記入
 var serviceInfo = model.ServiceInfo{
-	Title: "Amazon価格相場推移変動通知ドットコム",
+	Title: "Amazon価格相場推移変動最安値通知ドットコム",
 }
 
 func MainPage() echo.HandlerFunc {
