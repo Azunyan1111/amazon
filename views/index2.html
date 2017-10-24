@@ -22,11 +22,11 @@
         var data = new google.visualization.DataTable();
         data.addColumn('date','日時');
         data.addColumn('number','価格');
-
+        {{if .ProductStocks}}
         {{range .ProductStocks}}
             data.addRow([new Date({{.InsertTime}}*1000), {{.Amount}}]);
         {{end}}
-
+        {{end}}
         var options = {
             title: '価格推移表',
             hAxis: {format: 'MM月dd日'}, // 表示フォーマットの指定
@@ -55,6 +55,7 @@
         </tr>
         </thead>
         <tbody>
+        {{if .ProductStocks}}
         {{range .ProductStocks}}
         <tr>
             <th>{{.Amount}}</th>
@@ -71,8 +72,20 @@
             </th>
         </tr>
         {{end}}
+        {{end}}
         </tbody>
     </table>
 </div>
+
+<!-- Random Item -->
+{{if .RandomItems}}
+    {{range .RandomItems}}
+    <div class="hoge">
+        <a href="/{{.ASIN}}">
+        <h5>{{.Title}}</h5>
+        <img src="{{.Image}}" class="img-fluid" alt="Responsive image"></a>
+    </div>
+    {{end}}
+{{end}}
 {{template "footer" .}}
 {{end}}

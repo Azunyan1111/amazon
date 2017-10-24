@@ -48,7 +48,13 @@ func ProductPage() echo.HandlerFunc {
 		customServiceInfo.SubTitle = item.Title
 		// 画像画質変更
 		item.Image = strings.Replace(item.Image, "SL75", "SL1500", 1)
-		data := &model.PageContentData{ServiceInfo: customServiceInfo, Item: item, ProductStocks: productStocks}
+
+		//ランダムのアイテム取得
+		ranItem, err := model.SelectRandomProduct(5)
+		if err != nil {
+			fmt.Println(err)
+		}
+		data := &model.PageContentData{ServiceInfo: customServiceInfo, Item: item, ProductStocks: productStocks, RandomItems: ranItem}
 		return c.Render(http.StatusOK, "index2", data)
 	}
 }

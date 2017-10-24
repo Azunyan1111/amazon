@@ -23,13 +23,12 @@ func DataBaseInit() {
 // get rank urls
 // WANG this is 10 time second. only go func{}()
 func SelectAllUrl() ([]string, error) {
-	// TODO: LIMIT
 	rows, err := MyDB.Query("SELECT URL FROM CategoryURL ORDER BY RAND()")
 	if err != nil {
 		return nil, err
 	}
 	// list append
-	var urls []string = make([]string, 0)
+	var urls []string
 	for rows.Next() {
 		var url string
 		if err := rows.Scan(&url); err != nil {
@@ -65,7 +64,7 @@ func SelectNotHaveInfoItemForASIN(limit int) ([]string, error) {
 		return nil, err
 	}
 	// list append
-	var asins []string = make([]string, 0)
+	var asins []string
 	for rows.Next() {
 		var asin string
 		if err := rows.Scan(&asin); err != nil {
@@ -85,7 +84,7 @@ func SelectAllForASINLimit864000() ([]string, error) {
 	}
 
 	// query. API MAX 86500 / day
-	rows, err := MyDB.Query("SELECT ASIN FROM Items ORDER BY RAND() LIMIT 864000")
+	rows, err := myDB.Query("SELECT ASIN FROM Items ORDER BY RAND() LIMIT 864000")
 	if err != nil {
 		return nil, err
 	}
@@ -142,4 +141,23 @@ func SelectProductStockForASIN(asin string) ([]ProductStock, error) {
 		productStocks = append(productStocks, productStock)
 	}
 	return productStocks, nil
+}
+
+func SelectRandomProduct(count int64)([]Item, error){
+	// query. API MAX 86500 / day
+	rows, err := MyDB.Query("SELECT ASIN,title,image FROM Items WHERE title IS NOT NULL ORDER BY RAND() LIMIT ?", count)
+	if err != nil {
+		return nil, err
+	}
+	// list append
+	var asins []Item
+	for rows.Next() {
+		var asin Item
+		if err := rows.Scan(&asin.ASIN, &asin.Title, &asin.Image); err != nil {
+			fmt.Println(err)
+			continue
+		}
+		asins = append(asins, asin)
+	}
+	return asins, nil
 }

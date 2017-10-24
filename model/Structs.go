@@ -12,6 +12,7 @@ type PageContentData struct {
 	Message    string
 	SubMessage string
 	Item
+	RandomItems 	[]Item
 	ProductStocks []ProductStock
 }
 
