@@ -40,7 +40,7 @@ func main() {
 	// heroku
 	go func() {
 		time.Sleep(29 * time.Minute + 50 * time.Second)
-		http.Get("https://calm-tor-56001.herokuapp.com/")
+		//http.Get("https://calm-tor-56001.herokuapp.com/")
 	}()
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
