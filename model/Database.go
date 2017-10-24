@@ -84,7 +84,7 @@ func SelectAllForASINLimit864000() ([]string, error) {
 	}
 
 	// query. API MAX 86500 / day
-	rows, err := myDB.Query("SELECT ASIN FROM Items WHERE title IS NOT NULL ORDER BY RAND() LIMIT ?")
+	rows, err := myDB.Query("SELECT ASIN FROM Items WHERE title IS NOT NULL ORDER BY RAND() LIMIT 864000")
 	if err != nil {
 		return nil, err
 	}
