@@ -135,6 +135,7 @@ func SelectProductStockForASIN(asin string) ([]ProductStock, error) {
 		var productStock ProductStock
 		if err := rows.Scan(&productStock.Amount, &productStock.Channel,
 			&productStock.Conditions, &productStock.ShippingTime, &productStock.InsertTime); err != nil {
+				fmt.Println("hoge")
 			return []ProductStock{}, err
 		}
 		productStock.ASIN = asin

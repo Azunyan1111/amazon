@@ -139,13 +139,17 @@ func GetPrice() {
 
 			// stocks to one stock
 			for _, stock := range stocks {
+				amount,err := strconv.ParseInt(stock.FindByPath("Price.LandedPrice.Amount")[0].Value.(string),10,64)
+				if err != nil{
+					continue
+				}
 				temp := ProductStock{
 					ASIN:         product.FindByPath("Product.Identifiers.MarketplaceASIN.ASIN")[0].Value.(string),
-					Amount:       stock.FindByPath("Price.LandedPrice.Amount")[0].Value.(string),
+					Amount:       amount,
 					Channel:      stock.FindByPath("Qualifiers.FulfillmentChannel")[0].Value.(string),
 					Conditions:   stock.FindByPath("Qualifiers.ItemCondition")[0].Value.(string),
 					ShippingTime: stock.FindByPath("Qualifiers.ShippingTime.Max")[0].Value.(string),
-					InsertTime:   strconv.FormatInt(insertTime, 10),
+					InsertTime:   insertTime,
 				}
 				if !isInArray(saveProduct, temp) {
 					saveProduct = append(saveProduct, temp)

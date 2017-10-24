@@ -10,7 +10,7 @@ import (
 
 // サイト共有情報記入
 var serviceInfo = model.ServiceInfo{
-	"Amazon価格相場推移変動通知ドットコム",
+	Title: "Amazon価格相場推移変動通知ドットコム",
 }
 
 func MainPage() echo.HandlerFunc {
@@ -45,7 +45,7 @@ func ProductPage() echo.HandlerFunc {
 
 		// タストルカスタマイズ
 		customServiceInfo := serviceInfo
-		customServiceInfo.Title = item.Title + " | " + serviceInfo.Title
+		customServiceInfo.SubTitle = item.Title
 		// 画像画質変更
 		item.Image = strings.Replace(item.Image, "SL75", "SL1500", 1)
 		data := &model.PageContentData{ServiceInfo: customServiceInfo, Item: item, ProductStocks: productStocks}

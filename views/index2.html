@@ -2,14 +2,47 @@
 {{template "header" .}}
 <div class="page-header" id="banner">
 </div>
-<h1>{{.Item.Title}}</h1>
-<img src="{{.Item.Image}}">
-<h2>{{.Item.ASIN}}</h2>
-<a href="http://www.amazon.co.jp/dp/{{.Item.ASIN}}"><button>買いに行く</button></a>
+<div class="col-lg-8 col-md-7 col-sm-6" style="margin: 10px">
+    <h1>{{.Item.Title}}</h1>
+    <img src="{{.Item.Image}}" class="img-fluid" alt="Responsive image">
+    <h2>{{.Item.ASIN}}</h2>
+    <a href="http://www.amazon.co.jp/dp/{{.Item.ASIN}}"><button>買いに行く</button></a>
+</div>
 
 {{if .Message}}
 <h3>{{.Message}}</h3>
 {{end}}
+
+<!-- グラフ -->
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date','日時');
+        data.addColumn('number','価格');
+
+        {{range .ProductStocks}}
+            data.addRow([new Date({{.InsertTime}}*1000), {{.Amount}}]);
+        {{end}}
+
+        var options = {
+            title: '価格推移表',
+            hAxis: {format: 'MM月dd日'}, // 表示フォーマットの指定
+            pointSize: 10,
+            vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+
+<div class="data" style="clear:both;margin: 10px">
+    <div id="chart_div" style="width: 50%; height: 300px;"></div>
+</div>
+
 <div class="bs-component">
     <table class="table table-striped table-hover ">
         <thead>
@@ -28,7 +61,14 @@
             <th>{{.Channel}}</th>
             <th>{{.Conditions}}</th>
             <th>{{.ShippingTime}}</th>
-            <th>{{.InsertTime}}</th>
+            <th id="{{.InsertTime}}">
+                <script>
+                    hoge = new Date({{.InsertTime}}*1000);
+                    document.getElementById("{{.InsertTime}}").innerText = hoge.getMonth() + "月";
+                    document.getElementById("{{.InsertTime}}").innerText += hoge.getDay() + "日";
+                    document.getElementById("{{.InsertTime}}").innerText += hoge.getHours() + "時";
+                </script>
+            </th>
         </tr>
         {{end}}
         </tbody>

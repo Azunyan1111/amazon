@@ -3,6 +3,7 @@ package model
 // サイトで共通情報
 type ServiceInfo struct {
 	Title string
+	SubTitle string
 }
 
 // コンテンツHTMLに渡す情報
@@ -22,9 +23,9 @@ type Item struct {
 
 type ProductStock struct {
 	ASIN         string
-	Amount       string
+	Amount       int64
 	Channel      string
 	Conditions   string
 	ShippingTime string
-	InsertTime   string
+	InsertTime   int64
 }
