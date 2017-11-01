@@ -8,8 +8,6 @@ import (
 	"html/template"
 	"io"
 	"os"
-	"time"
-	"net/http"
 )
 
 type Template struct {
@@ -23,13 +21,13 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 func main() {
 	// 初期処理
 	model.DataBaseInit()
-	model.ApiInit()
+	//model.ApiInit()
 
-
+	/*/
 	// ループ処理
 	go func() {
 		for _ = 0; ; {
-			// 1日一回実行するランキングWebスクレイピング関数。
+			 //1日一回実行するランキングWebスクレイピング関数。
 			go func() { model.GetRankingASIN() }() //ok
 			// 1日1回実行すると適当に拾ってきたASINリストから価格情報を取得して格納する。
 			go func() { model.GetPrice() }()
@@ -45,6 +43,7 @@ func main() {
 
 	// 1回実行すればずっとASINから商品タイトルと画像URLを取得する関数
 	go func() { model.GetItemInfoLoopForDatabases() }() //ok
+	//*/
 
 	// Echoのインスタンス作る
 	e := echo.New()
