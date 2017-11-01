@@ -11,7 +11,6 @@ import (
 var MyDB *sql.DB
 
 func DataBaseInit() {
-	//hoge := "root:541279xx@tcp(mydbinstance.cv8ap3ddulzc.us-east-2.rds.amazonaws.com:3306)/amazon"
 	dataSource := os.Getenv("DATABASE_URL")
 	var err error
 	MyDB, err = sql.Open("mysql", dataSource) //"root:@/my_database")
